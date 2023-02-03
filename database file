@@ -1,0 +1,19 @@
+const sqlite3 = require('sqlite3').verbose();
+const db = new sqlite3.Database('ces.db');
+
+db.serialize(() => {
+    db.each("SELECT students.studentname FROM enrollments, students, classes " +
+            "WHERE enrollments.studentid = students.studentid AND classes.classid = enrollments.classid", (err, row) => {
+        if (err) {
+            console.error(err.message);
+        } else {
+            console.log(row.studentname);
+        }
+    });
+});
+
+db.close((err) => {
+    if (err) {
+      console.error(err.message);
+    }
+});
